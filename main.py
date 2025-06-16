@@ -81,7 +81,6 @@ async def get_homepage():
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Chat with Jaidivya - AI Assistant</title>
-        <script src="https://unpkg.com/livekit-client@2.1.0/dist/livekit-client.umd.js"></script>
         <style>
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -269,9 +268,38 @@ async def get_homepage():
             </div>
         </div>
 
+        <!-- Load LiveKit client library -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/livekit-client/1.15.13/livekit-client.umd.min.js"></script>
+        
         <script>
             let room = null;
             let isMuted = false;
+            
+            // Wait for LiveKit to be available
+            function waitForLiveKit() {
+                return new Promise((resolve, reject) => {
+                    if (typeof LiveKitClient !== 'undefined') {
+                        resolve();
+                        return;
+                    }
+                    
+                    let attempts = 0;
+                    const maxAttempts = 50;
+                    
+                    const checkLiveKit = () => {
+                        attempts++;
+                        if (typeof LiveKitClient !== 'undefined') {
+                            resolve();
+                        } else if (attempts >= maxAttempts) {
+                            reject(new Error('LiveKit client failed to load'));
+                        } else {
+                            setTimeout(checkLiveKit, 100);
+                        }
+                    };
+                    
+                    checkLiveKit();
+                });
+            }
             
             async function connectToRoom() {
                 const connectBtn = document.getElementById('connectBtn');
@@ -282,10 +310,17 @@ async def get_homepage():
                     connectBtn.disabled = true;
                     status.style.display = 'block';
                     status.className = 'status connecting';
-                    status.textContent = 'Connecting to Jaidivya AI...';
+                    status.textContent = 'Loading LiveKit client...';
+                    
+                    // Wait for LiveKit to be available
+                    await waitForLiveKit();
+                    
+                    status.textContent = 'Requesting microphone access...';
                     
                     // Request microphone permission
                     await navigator.mediaDevices.getUserMedia({ audio: true });
+                    
+                    status.textContent = 'Connecting to Jaidivya AI...';
                     
                     // Initialize LiveKit room
                     room = new LiveKitClient.Room({
@@ -309,16 +344,21 @@ async def get_homepage():
                     });
                     
                     room.on('trackSubscribed', (track, publication, participant) => {
-                        if (track.kind === 'audio') {
+                        if (track.kind === 'audio' && participant.identity !== room.localParticipant.identity) {
                             const audioElement = track.attach();
                             document.body.appendChild(audioElement);
-                            audioElement.play();
+                            audioElement.play().catch(e => console.log('Audio play failed:', e));
                         }
+                    });
+                    
+                    room.on('participantConnected', (participant) => {
+                        console.log('Participant connected:', participant.identity);
                     });
                     
                     // Get access token and connect
                     const token = await getAccessToken();
                     const wsUrl = await getWebSocketUrl();
+                    
                     await room.connect(wsUrl, token);
                     
                     connectBtn.textContent = '🔄 Reconnect';
@@ -344,7 +384,8 @@ async def get_homepage():
                 });
                 
                 if (!response.ok) {
-                    throw new Error('Failed to get access token');
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to get access token');
                 }
                 
                 const data = await response.json();
@@ -353,6 +394,9 @@ async def get_homepage():
             
             async function getWebSocketUrl() {
                 const response = await fetch('/api/config');
+                if (!response.ok) {
+                    throw new Error('Failed to get configuration');
+                }
                 const data = await response.json();
                 return data.wsUrl;
             }
@@ -379,6 +423,11 @@ async def get_homepage():
                     room.disconnect();
                 }
             }
+            
+            // Initialize when page loads
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log('Page loaded, LiveKit available:', typeof LiveKitClient !== 'undefined');
+            });
         </script>
     </body>
     </html>
