@@ -1,5 +1,6 @@
 import asyncio
 import os
+import logging
 from dotenv import load_dotenv
 from livekit import agents, api
 from livekit.agents import WorkerOptions, cli
@@ -23,19 +24,20 @@ import uvicorn
 from datetime import datetime, timedelta
 import jwt
 import threading
-import logging
 
+# Load environment variables
+load_dotenv()
+
+# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(),  # Console output
+        logging.FileHandler('agent.log')  # File output
     ]
 )
 logger = logging.getLogger(__name__)
-
-# Load environment variables
-load_dotenv()
 
 def format_context(ctx_dict):
     lines = []
@@ -77,7 +79,9 @@ class JaidivyaAssistant(Agent):
             instructions="You are Jaidivya Kumar Lohani, speaking directly to a recruiter in a voice interview. Be natural, enthusiastic, and professional. Introduce yourself and greet the user.",
             chat_ctx=chat_ctx
         )
+        logger.info("JaidivyaAssistant initialized")
 
+# FastAPI app for API endpoints only
 app = FastAPI(title="Jaidivya AI Voice Assistant API")
 
 # Add CORS middleware to allow frontend connections
@@ -154,6 +158,23 @@ async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "timestamp": datetime.now().isoformat()}
 
+@app.get("/debug")
+async def debug_info():
+    """Debug endpoint to check configuration"""
+    return {
+        "environment_variables": {
+            "LIVEKIT_URL": "✅ Set" if os.getenv("LIVEKIT_URL") else "❌ Missing",
+            "LIVEKIT_API_KEY": "✅ Set" if os.getenv("LIVEKIT_API_KEY") else "❌ Missing", 
+            "LIVEKIT_API_SECRET": "✅ Set" if os.getenv("LIVEKIT_API_SECRET") else "❌ Missing",
+            "OPENAI_API_KEY": "✅ Set" if os.getenv("OPENAI_API_KEY") else "❌ Missing",
+        },
+        "agent_thread": {
+            "exists": 'agent_thread' in globals(),
+            "alive": agent_thread.is_alive() if 'agent_thread' in globals() else False
+        },
+        "timestamp": datetime.now().isoformat()
+    }
+
 @app.get("/api/agent-status")
 async def agent_status():
     """Check agent status"""
@@ -206,18 +227,35 @@ def run_livekit_agent():
         logger.error(f"LiveKit agent crashed: {str(e)}", exc_info=True)
 
 if __name__ == "__main__":
-    logger.info("Starting application...")
+    logger.info("🚀 Starting Jaidivya Voice Assistant...")
     
-    # Start LiveKit agent in background thread (non-daemon for better debugging)
-    agent_thread = threading.Thread(target=run_livekit_agent, daemon=False)
-    agent_thread.start()
-    logger.info("LiveKit agent thread started")
+    # Check if we're running on Render or similar platform
+    is_production = os.getenv("RENDER") or os.getenv("RAILWAY") or os.getenv("HEROKU")
     
-    # Give the agent a moment to start
-    import time
-    time.sleep(2)
+    if is_production:
+        logger.info("🌐 Production environment detected")
+        # In production, run agent and API server together
+        agent_thread = threading.Thread(target=run_livekit_agent, daemon=False)
+        agent_thread.start()
+        logger.info("🤖 LiveKit agent thread started")
+        
+        # Give the agent time to start
+        import time
+        time.sleep(3)
+        logger.info("⏰ Agent startup delay complete")
+    else:
+        logger.info("💻 Development environment detected")
+        logger.info("💡 Consider running agent separately for better debugging")
     
     # Start FastAPI server
     port = int(os.getenv("PORT", 8080))
-    logger.info(f"Starting FastAPI server on port {port}")
+    logger.info(f"🌐 Starting FastAPI server on http://0.0.0.0:{port}")
+    
+    # Add startup event to log when server is ready
+    @app.on_event("startup")
+    async def startup_event():
+        logger.info("✅ FastAPI server started successfully")
+        logger.info(f"🔗 Health check: http://0.0.0.0:{port}/health")
+        logger.info(f"📋 API docs: http://0.0.0.0:{port}/docs")
+    
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
