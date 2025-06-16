@@ -229,23 +229,17 @@ def run_livekit_agent():
 if __name__ == "__main__":
     logger.info("🚀 Starting Jaidivya Voice Assistant...")
     
-    # Check if we're running on Render or similar platform
-    is_production = os.getenv("RENDER") or os.getenv("RAILWAY") or os.getenv("HEROKU")
-    
-    if is_production:
-        logger.info("🌐 Production environment detected")
-        # In production, run agent and API server together
-        agent_thread = threading.Thread(target=run_livekit_agent, daemon=False)
-        agent_thread.start()
-        logger.info("🤖 LiveKit agent thread started")
+   
+    logger.info("🌐 Production environment detected")
+    # In production, run agent and API server together
+    agent_thread = threading.Thread(target=run_livekit_agent, daemon=False)
+    agent_thread.start()
+    logger.info("🤖 LiveKit agent thread started")
         
-        # Give the agent time to start
-        import time
-        time.sleep(3)
-        logger.info("⏰ Agent startup delay complete")
-    else:
-        logger.info("💻 Development environment detected")
-        logger.info("💡 Consider running agent separately for better debugging")
+    # Give the agent time to start
+    import time
+    time.sleep(3)
+    logger.info("⏰ Agent startup delay complete")
     
     # Start FastAPI server
     port = int(os.getenv("PORT", 8080))
