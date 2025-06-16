@@ -14,7 +14,7 @@ from livekit.plugins import (
     silero,
     noise_cancellation,
 )
-from context import jaidivya_context
+from backend.context import jaidivya_context
 from livekit.agents.llm.chat_context import ChatContext, ChatMessage
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
