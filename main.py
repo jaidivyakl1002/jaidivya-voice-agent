@@ -432,7 +432,7 @@ async def generate_token(request: Request):
 async def get_config():
     """Get LiveKit configuration"""
     return JSONResponse({
-        "wsUrl": os.getenv("LIVEKIT_URL", "wss://your-project.livekit.cloud")
+        "wsUrl": os.getenv("LIVEKIT_URL")
     })
 
 async def livekit_entrypoint(ctx: agents.JobContext):
