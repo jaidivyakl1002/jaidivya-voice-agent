@@ -1,13 +1,10 @@
-import asyncio
-import os
 import logging
 from dotenv import load_dotenv
-from livekit import agents, api
+from livekit import agents
 from livekit.agents import WorkerOptions, cli
 from livekit.agents import (
     AgentSession,
     Agent,
-    llm,
     RoomInputOptions,
 )
 from livekit.plugins import (
@@ -16,14 +13,7 @@ from livekit.plugins import (
     noise_cancellation,
 )
 from context import jaidivya_context
-from livekit.agents.llm.chat_context import ChatContext, ChatMessage
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
-from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
-from datetime import datetime, timedelta
-import jwt
-import threading
+from livekit.agents.llm.chat_context import ChatContext
 
 # Load environment variables
 load_dotenv()
