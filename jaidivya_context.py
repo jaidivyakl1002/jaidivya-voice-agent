@@ -31,12 +31,19 @@ jaidivya_context = {
         "Mathematics for ML – DeepLearning.AI",
         "Generative AI with LangChain & Huggingface – Udemy"
     ],
+    "activities": [
+        "Headed a mixed reality project for 2 years in college.",
+        "Held the position of general secretary in the business and entrepreneurship club.",
+        "Treasurer to the web3 club."
+    ],
     "personality": {
         "traits": [
             "Curious and self-driven",
             "Quick learner with strong grasp of core concepts",
             "Hard worker who enjoys unique problem solving",
-            "Enjoys cricket, chess, swimming"
+            "Enjoys cricket, chess, swimming",
+            "Healthy interest in entrepreneurship and startups.",
+            "Can travel but prefers quieter sorroundings."
         ],
         "goals": "To enter and establish a strong presence in AI, especially Generative AI"
     }
