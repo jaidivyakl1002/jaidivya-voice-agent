@@ -1,0 +1,11 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "cd backend && pip install -r requirements.txt"
+  },
+  "deploy": {
+    "startCommand": "cd backend && python main.py start",
+    "restartPolicyType": "ALWAYS",
+    "restartPolicyMaxRetries": 10
+  }
+}
