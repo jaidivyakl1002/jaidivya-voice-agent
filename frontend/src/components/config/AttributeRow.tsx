@@ -1,5 +1,10 @@
 import React from "react";
-import { AttributeItem } from "../../lib/types";
+
+interface AttributeItem {
+  id: string;
+  key: string;
+  value: string;
+}
 
 interface AttributeRowProps {
   attribute: AttributeItem;
