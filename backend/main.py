@@ -92,7 +92,8 @@ async def livekit_entrypoint(ctx: agents.JobContext):
         session = AgentSession(
             vad=silero.VAD.load(),
             stt=openai.STT(),
-            llm=openai.realtime.RealtimeModel(voice="echo"),
+            # llm=openai.realtime.RealtimeModel(voice="echo"),
+            llm=openai.LLM(model="gpt-3.5-turbo"),
             tts=openai.TTS(),
         )
         
