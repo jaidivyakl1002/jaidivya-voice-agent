@@ -8,7 +8,6 @@ import { TokenResult } from "../../lib/types";
 
 const apiKey = process.env.LIVEKIT_API_KEY;
 const apiSecret = process.env.LIVEKIT_API_SECRET;
-const livekitUrl = process.env.NEXT_PUBLIC_LIVEKIT_URL || process.env.LIVEKIT_URL;
 
 const createToken = (
   userInfo: AccessTokenOptions,
@@ -45,11 +44,6 @@ export default async function handleToken(
       res.status(500).end();
       return;
     }
-    if (!livekitUrl) {
-      res.statusMessage = "LiveKit URL not configured";
-      res.status(500).end();
-      return;
-    }
 
     const {
       roomName: roomNameFromBody,
@@ -60,15 +54,15 @@ export default async function handleToken(
       agentName: agentNameFromBody,
     } = req.body;
 
-    // Get room name from query params or use default
+    // Get room name from query params or generate random one
     const roomName =
       (roomNameFromBody as string) ||
-      "interview-room";
+      `room-${generateRandomAlphanumeric(4)}-${generateRandomAlphanumeric(4)}`;
 
     // Get participant name from query params or generate random one
     const identity =
       (participantIdFromBody as string) ||
-      `user-${generateRandomAlphanumeric(6)}`;
+      `identity-${generateRandomAlphanumeric(4)}`;
 
     // Get agent name from query params or use none (automatic dispatch)
     const agentName = (agentNameFromBody as string) || undefined;
@@ -94,17 +88,13 @@ export default async function handleToken(
       grant,
       agentName,
     );
-    
-    const result = {
+    const result: TokenResult = {
       identity,
       accessToken: token,
-      url: livekitUrl,
-      serverUrl: livekitUrl
     };
 
     res.status(200).json(result);
   } catch (e) {
-    console.error("Token generation error:", e);
     res.statusMessage = (e as Error).message;
     res.status(500).end();
   }

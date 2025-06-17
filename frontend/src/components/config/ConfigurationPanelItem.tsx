@@ -29,7 +29,7 @@ export const ConfigurationPanelItem: React.FC<ConfigurationPanelItemProps> = ({
             <span className="flex flex-row gap-2">
               <TrackToggle
                 className="px-2 py-1 bg-gray-900 text-gray-300 border border-gray-800 rounded-sm hover:bg-gray-800"
-                source={source as any} // Type assertion to bypass the type error
+                source={source}
               />
               {source === Track.Source.Camera && (
                 <PlaygroundDeviceSelector kind="videoinput" />

@@ -29,7 +29,7 @@ class TokenRequest(BaseModel):
     name: str = ""
     room: str = "interview-room"
 
-@app.post("/api/token")
+@app.post("/api/token/")
 async def get_token(request: TokenRequest):
     try:
         # Get LiveKit credentials from environment
