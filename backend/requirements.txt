@@ -4,7 +4,6 @@ matplotlib
 pydantic
 python-dotenv
 livekit-agents
-livekit-server-sdk
 livekit-plugins-silero
 livekit-plugins-noise-cancellation~=0.2
 livekit-agents[openai]~=1.0
