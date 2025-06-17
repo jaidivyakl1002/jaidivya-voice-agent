@@ -72,8 +72,8 @@ export function HomeInner() {
   return (
     <>
       <Head>
-        <title>{config.title}</title>
-        <meta name="description" content={config.description} />
+        <title>Jaidivya Voice Assistant</title>
+        <meta name="description" content="Your personal voice-based AI assistant." />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -113,7 +113,6 @@ export function HomeInner() {
             }}
           >
             <Playground
-              themeColors={themeColors}
               onConnect={(c) => {
                 const m = process.env.NEXT_PUBLIC_LIVEKIT_URL ? "env" : mode;
                 handleConnect(c, m);
