@@ -39,6 +39,9 @@ jaidivya_context = {
     "Date of Birth":[
         "10th February 2002"
     ],
+    "Languages Spoken":[
+        "Speaks only English and Hindi but fluently"
+    ],
     "personality": {
         "traits": [
             "Curious and self-driven",
