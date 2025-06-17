@@ -7,9 +7,10 @@ jaidivya_context = {
         "cgpa": 8.44
     },
     "skills": {
-        "languages": ["Python", "C/C++", "JavaScript", "TypeScript"],
-        "frameworks": ["React", "FastAPI", "CrewAI", "HuggingFace"],
-        "tools": ["GitHub", "PyTest", "Socket.IO", "CacheTools", "TensorFlow", "Keras", "BERT"]
+        "languages": ["Python", "JavaScript", "TypeScript"],
+        "frameworks": ["CrewAI", "Langchain", "FastAPI", "React", "HuggingFace"],
+        "tools": ["GitHub", "PyTest", "Sentry", "BERT"],
+        "Platforms": ["GCP(Google cloud platform)"]
     },
     "projects": [
         "Speech-based disease detection with >90% accuracy using CNNs and audio features",
