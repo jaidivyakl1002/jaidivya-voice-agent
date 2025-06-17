@@ -12,7 +12,7 @@ from livekit.plugins import (
     silero,
     noise_cancellation,
 )
-from context import jaidivya_context
+from jaidivya_context import jaidivya_context
 from livekit.agents.llm.chat_context import ChatContext
 
 # Load environment variables
