@@ -1,9 +1,14 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { ConnectionState } from "livekit-client";
-import { AttributeItem } from "@/lib/types";
 import { Button } from "@/components/button/Button";
 import { useLocalParticipant } from "@livekit/components-react";
 import { AttributeRow } from "./AttributeRow";
+
+interface AttributeItem {
+  id: string;
+  key: string;
+  value: string;
+}
 
 interface AttributesInspectorProps {
   attributes: AttributeItem[];
