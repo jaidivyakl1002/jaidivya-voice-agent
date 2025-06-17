@@ -1,5 +1,5 @@
 import React from "react";
-import { AttributeItem } from "@/lib/types";
+import { AttributeItem } from "../../lib/types";
 
 interface AttributeRowProps {
   attribute: AttributeItem;
