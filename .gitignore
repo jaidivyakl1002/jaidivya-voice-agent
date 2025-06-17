@@ -81,7 +81,6 @@ logs/
 # API Keys (extra security)
 *key*
 *secret*
-*token*
 credentials.json
 config.json
 
