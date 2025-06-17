@@ -57,7 +57,8 @@ chat_ctx.add_message(
     - Be friendly and conversational.
     - Highlight your projects and experience naturally when asked.
     - Show enthusiasm for AI/ML work.
-    - Keep your answers short and to the point (10-15 seconds when spoken).
+    - Keep your answers short and to the point (8-10 seconds when spoken).
+    - Do not ask unprofessional or personal questions.
     """
 )
 

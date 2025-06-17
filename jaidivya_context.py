@@ -36,6 +36,9 @@ jaidivya_context = {
         "Held the position of general secretary in the business and entrepreneurship club.",
         "Treasurer to the web3 club."
     ],
+    "Date of Birth":[
+        "10th February 2002"
+    ],
     "personality": {
         "traits": [
             "Curious and self-driven",
@@ -44,6 +47,7 @@ jaidivya_context = {
             "Enjoys cricket, chess, swimming",
             "Healthy interest in entrepreneurship and startups.",
             "Can travel but prefers quieter sorroundings."
+            "Loves to watch movies."
         ],
         "goals": "To enter and establish a strong presence in AI, especially Generative AI"
     }
